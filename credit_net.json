@@ -1,0 +1,1122 @@
+{
+  "nodes": [
+    {
+      "name": "family_income",
+      "states": [
+        "rich",
+        "wealthy",
+        "poor"
+      ]
+    },
+    {
+      "name": "credit_worthiness",
+      "states": [
+        "good",
+        "bad"
+      ]
+    },
+    {
+      "name": "future_income",
+      "states": [
+        "high",
+        "middle",
+        "low"
+      ]
+    },
+    {
+      "name": "have_job",
+      "states": [
+        "yes_permanent",
+        "yes_non_permanent",
+        "no"
+      ]
+    },
+    {
+      "name": "age",
+      "states": [
+        "young",
+        "adult",
+        "old"
+      ]
+    },
+    {
+      "name": "reliable",
+      "states": [
+        "yes",
+        "no"
+      ]
+    },
+    {
+      "name": "payment_history",
+      "states": [
+        "good",
+        "bad"
+      ]
+    },
+    {
+      "name": "real_estate",
+      "states": [
+        "lots",
+        "little",
+        "no"
+      ]
+    },
+    {
+      "name": "assets",
+      "states": [
+        "yes",
+        "no"
+      ]
+    },
+    {
+      "name": "income",
+      "states": [
+        "high",
+        "middle",
+        "low"
+      ]
+    },
+    {
+      "name": "ratio_of_debts_to_income",
+      "states": [
+        "low",
+        "medium",
+        "high"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "family_income",
+      "to": ["assets", "reliable"]
+    },
+    {
+      "from": "age",
+      "to": ["payment_history", "reliable"]
+    },
+    {
+      "from": "have_job",
+      "to": ["income"]
+    },
+    {
+      "from": "real_estate",
+      "to": ["reliable"]
+    },
+    {
+      "from": "ratio_of_debts_to_income",
+      "to": ["credit_worthiness", "payment_history"]
+    },
+    {
+      "from": "income",
+      "to": ["assets", "future_income"]
+    },
+    {
+      "from": "payment_history",
+      "to": ["reliable"]
+    },
+    {
+      "from": "assets",
+      "to": ["future_income"]
+    },
+    {
+      "from": "reliable",
+      "to": ["credit_worthiness"]
+    },
+    {
+      "from": "future_income",
+      "to": ["credit_worthiness"]
+    }
+  ],
+  "coefficients": [
+    {
+      "node": "family_income",
+      "data": [
+        {
+          "states": ["rich", "wealthy", "poor"],
+          "values": [0.7, 0.2, 0.1]
+        }
+      ]
+    },
+    {
+      "node": "age",
+      "data": [
+        {
+          "states": ["young", "adult", "old"],
+          "values": [0.2, 0.5, 0.3]
+        }
+      ]
+    },
+    {
+      "node": "have_job",
+      "data": [
+        {
+          "states": ["yes_permanent", "yes_non_permanent", "no"],
+          "values": [0.6, 0.3, 0.1]
+        }
+      ]
+    },
+    {
+      "node": "ratio_of_debts_to_income",
+      "data": [
+        {
+          "states": ["low", "medium", "high"],
+          "values": [0.7, 0.2, 0.1]
+        }
+      ]
+    },
+    {
+      "node": "real_estate",
+      "data": [
+        {
+          "states": ["lots", "little", "no"],
+          "values": [0.7, 0.25, 0.05]
+        }
+      ]
+    },
+    {
+      "node": "income",
+      "data": [
+        {
+          "states": ["high", "middle", "low"],
+          "fields": {
+            "have_job": "yes_permanent"
+          },
+          "values": [0.7, 0.25, 0.05]
+        },
+        {
+          "states": ["high", "middle", "low"],
+          "fields": {
+            "have_job": "yes_non_permanent"
+          },
+          "values": [0.3, 0.45, 0.25]
+        },
+        {
+          "states": ["high", "middle", "low"],
+          "fields": {
+            "have_job": "no"
+          },
+          "values": [0.01, 0.2, 0.79]
+        }
+      ]
+    },
+    {
+      "node": "assets",
+      "data": [
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "income": "high",
+            "family_income": "rich"
+          },
+          "values": [0.99, 0.01]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "income": "high",
+            "family_income": "wealthy"
+          },
+          "values": [0.85, 0.15]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "income": "high",
+            "family_income": "poor"
+          },
+          "values": [0.5, 0.5]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "income": "middle",
+            "family_income": "rich"
+          },
+          "values": [0.95, 0.05]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "income": "middle",
+            "family_income": "wealthy"
+          },
+          "values": [0.6, 0.4]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "income": "middle",
+            "family_income": "poor"
+          },
+          "values": [0.35, 0.65]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "income": "low",
+            "family_income": "rich"
+          },
+          "values": [0.9, 0.1]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "income": "low",
+            "family_income": "wealthy"
+          },
+          "values": [0.35, 0.65]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "income": "low",
+            "family_income": "poor"
+          },
+          "values": [0.01, 0.99]
+        }
+      ]
+    },
+    {
+      "node": "future_income",
+      "data": [
+        {
+          "states": ["high", "middle", "low"],
+          "fields": {
+            "assets": "yes",
+            "income": "high"
+          },
+          "values": [0.85, 0.1, 0.05]
+        },
+        {
+          "states": ["high", "middle", "low"],
+          "fields": {
+            "assets": "yes",
+            "income": "middle"
+          },
+          "values": [0.35, 0.5, 0.15]
+        },
+        {
+          "states": ["high", "middle", "low"],
+          "fields": {
+            "assets": "yes",
+            "income": "low"
+          },
+          "values": [0.15, 0.45, 0.4]
+        },
+        {
+          "states": ["high", "middle", "low"],
+          "fields": {
+            "assets": "no",
+            "income": "high"
+          },
+          "values": [0.75, 0.2, 0.05]
+        },
+        {
+          "states": ["high", "middle", "low"],
+          "fields": {
+            "assets": "no",
+            "income": "middle"
+          },
+          "values": [0.25, 0.55, 0.2]
+        },
+        {
+          "states": ["high", "middle", "low"],
+          "fields": {
+            "assets": "no",
+            "income": "low"
+          },
+          "values": [0.01, 0.2, 0.79]
+        }
+      ]
+    },
+    {
+      "node": "payment_history",
+      "data": [
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "age": "young",
+            "ratio_of_debts_to_income": "low"
+          },
+          "values": [0.4, 0.6]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "age": "young",
+            "ratio_of_debts_to_income": "medium"
+          },
+          "values": [0.3, 0.7]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "age": "young",
+            "ratio_of_debts_to_income": "high"
+          },
+          "values": [0.01, 0.99]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "age": "adult",
+            "ratio_of_debts_to_income": "low"
+          },
+          "values": [0.6, 0.4]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "age": "adult",
+            "ratio_of_debts_to_income": "medium"
+          },
+          "values": [0.55, 0.45]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "age": "adult",
+            "ratio_of_debts_to_income": "high"
+          },
+          "values": [0.35, 0.65]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "age": "old",
+            "ratio_of_debts_to_income": "low"
+          },
+          "values": [0.8, 0.2]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "age": "old",
+            "ratio_of_debts_to_income": "medium"
+          },
+          "values": [0.6, 0.4]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "age": "old",
+            "ratio_of_debts_to_income": "high"
+          },
+          "values": [0.3, 0.7]
+        }
+      ]
+    },
+    {
+      "node": "reliable",
+      "data": [
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "young",
+            "family_income": "rich",
+            "real_estate": "lots"
+          },
+          "values": [0.99, 0.01]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "young",
+            "family_income": "rich",
+            "real_estate": "little"
+          },
+          "values": [0.97, 0.03]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "young",
+            "family_income": "rich",
+            "real_estate": "no"
+          },
+          "values": [0.95, 0.05]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "young",
+            "family_income": "wealthy",
+            "real_estate": "lots"
+          },
+          "values": [0.95, 0.05]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "young",
+            "family_income": "wealthy",
+            "real_estate": "little"
+          },
+          "values": [0.6, 0.4]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "young",
+            "family_income": "wealthy",
+            "real_estate": "no"
+          },
+          "values": [0.4, 0.6]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "young",
+            "family_income": "poor",
+            "real_estate": "lots"
+          },
+          "values": [0.9, 0.1]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "young",
+            "family_income": "poor",
+            "real_estate": "little"
+          },
+          "values": [0.5, 0.5]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "young",
+            "family_income": "poor",
+            "real_estate": "no"
+          },
+          "values": [0.2, 0.8]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "adult",
+            "family_income": "rich",
+            "real_estate": "lots"
+          },
+          "values": [0.99, 0.01]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "adult",
+            "family_income": "rich",
+            "real_estate": "little"
+          },
+          "values": [0.94, 0.06]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "adult",
+            "family_income": "rich",
+            "real_estate": "no"
+          },
+          "values": [0.9, 0.1]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "adult",
+            "family_income": "wealthy",
+            "real_estate": "lots"
+          },
+          "values": [0.98, 0.02]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "adult",
+            "family_income": "wealthy",
+            "real_estate": "little"
+          },
+          "values": [0.85, 0.15]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "adult",
+            "family_income": "wealthy",
+            "real_estate": "no"
+          },
+          "values": [0.7, 0.3]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "adult",
+            "family_income": "poor",
+            "real_estate": "lots"
+          },
+          "values": [0.92, 0.08]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "adult",
+            "family_income": "poor",
+            "real_estate": "little"
+          },
+          "values": [0.65, 0.35]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "adult",
+            "family_income": "poor",
+            "real_estate": "no"
+          },
+          "values": [0.25, 0.75]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "old",
+            "family_income": "rich",
+            "real_estate": "lots"
+          },
+          "values": [0.999, 0.001]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "old",
+            "family_income": "rich",
+            "real_estate": "little"
+          },
+          "values": [0.99, 0.01]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "old",
+            "family_income": "rich",
+            "real_estate": "no"
+          },
+          "values": [0.98, 0.02]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "old",
+            "family_income": "wealthy",
+            "real_estate": "lots"
+          },
+          "values": [0.99, 0.01]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "old",
+            "family_income": "wealthy",
+            "real_estate": "little"
+          },
+          "values": [0.9, 0.1]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "old",
+            "family_income": "wealthy",
+            "real_estate": "no"
+          },
+          "values": [0.75, 0.25]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "old",
+            "family_income": "poor",
+            "real_estate": "lots"
+          },
+          "values": [0.94, 0.06]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "old",
+            "family_income": "poor",
+            "real_estate": "little"
+          },
+          "values": [0.7, 0.3]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "good",
+            "age": "old",
+            "family_income": "poor",
+            "real_estate": "no"
+          },
+          "values": [0.2, 0.8]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "young",
+            "family_income": "rich",
+            "real_estate": "lots"
+          },
+          "values": [0.85, 0.15]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "young",
+            "family_income": "rich",
+            "real_estate": "little"
+          },
+          "values": [0.75, 0.25]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "young",
+            "family_income": "rich",
+            "real_estate": "no"
+          },
+          "values": [0.7, 0.3]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "young",
+            "family_income": "wealthy",
+            "real_estate": "lots"
+          },
+          "values": [0.78, 0.22]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "young",
+            "family_income": "wealthy",
+            "real_estate": "little"
+          },
+          "values": [0.6, 0.4]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "young",
+            "family_income": "wealthy",
+            "real_estate": "no"
+          },
+          "values": [0.2, 0.8]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "young",
+            "family_income": "poor",
+            "real_estate": "lots"
+          },
+          "values": [0.6, 0.4]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "young",
+            "family_income": "poor",
+            "real_estate": "little"
+          },
+          "values": [0.2, 0.8]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "young",
+            "family_income": "poor",
+            "real_estate": "no"
+          },
+          "values": [0.001, 0.999]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "adult",
+            "family_income": "rich",
+            "real_estate": "lots"
+          },
+          "values": [0.87, 0.13]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "adult",
+            "family_income": "rich",
+            "real_estate": "little"
+          },
+          "values": [0.77, 0.23]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "adult",
+            "family_income": "rich",
+            "real_estate": "no"
+          },
+          "values": [0.74, 0.26]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "adult",
+            "family_income": "wealthy",
+            "real_estate": "lots"
+          },
+          "values": [0.8, 0.2]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "adult",
+            "family_income": "wealthy",
+            "real_estate": "little"
+          },
+          "values": [0.68, 0.32]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "adult",
+            "family_income": "wealthy",
+            "real_estate": "no"
+          },
+          "values": [0.25, 0.75]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "adult",
+            "family_income": "poor",
+            "real_estate": "lots"
+          },
+          "values": [0.65, 0.35]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "adult",
+            "family_income": "poor",
+            "real_estate": "little"
+          },
+          "values": [0.26, 0.74]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "adult",
+            "family_income": "poor",
+            "real_estate": "no"
+          },
+          "values": [0.002, 0.998]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "old",
+            "family_income": "rich",
+            "real_estate": "lots"
+          },
+          "values": [0.89, 0.11]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "old",
+            "family_income": "rich",
+            "real_estate": "little"
+          },
+          "values": [0.69, 0.31]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "old",
+            "family_income": "rich",
+            "real_estate": "no"
+          },
+          "values": [0.26, 0.74]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "old",
+            "family_income": "wealthy",
+            "real_estate": "lots"
+          },
+          "values": [0.81, 0.19]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "old",
+            "family_income": "wealthy",
+            "real_estate": "little"
+          },
+          "values": [0.7, 0.3]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "old",
+            "family_income": "wealthy",
+            "real_estate": "no"
+          },
+          "values": [0.26, 0.74]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "old",
+            "family_income": "poor",
+            "real_estate": "lots"
+          },
+          "values": [0.66, 0.34]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "old",
+            "family_income": "poor",
+            "real_estate": "little"
+          },
+          "values": [0.27, 0.73]
+        },
+        {
+          "states": ["yes", "no"],
+          "fields": {
+            "payment_history": "bad",
+            "age": "old",
+            "family_income": "poor",
+            "real_estate": "no"
+          },
+          "values": [0.0001, 0.9999]
+        }
+      ]
+    },
+    {
+      "node": "credit_worthiness",
+      "data": [
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "reliable": "yes",
+            "future_income": "high",
+            "ratio_of_debts_to_income": "low"
+          },
+          "values": [0.95, 0.05]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "reliable": "yes",
+            "future_income": "high",
+            "ratio_of_debts_to_income": "medium"
+          },
+          "values": [0.7, 0.3]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "reliable": "yes",
+            "future_income": "high",
+            "ratio_of_debts_to_income": "high"
+          },
+          "values": [0.35, 0.65]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "reliable": "yes",
+            "future_income": "middle",
+            "ratio_of_debts_to_income": "low"
+          },
+          "values": [0.9, 0.1]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "reliable": "yes",
+            "future_income": "middle",
+            "ratio_of_debts_to_income": "medium"
+          },
+          "values": [0.6, 0.4]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "reliable": "yes",
+            "future_income": "middle",
+            "ratio_of_debts_to_income": "high"
+          },
+          "values": [0.25, 0.75]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "reliable": "yes",
+            "future_income": "low",
+            "ratio_of_debts_to_income": "low"
+          },
+          "values": [0.7, 0.3]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "reliable": "yes",
+            "future_income": "low",
+            "ratio_of_debts_to_income": "medium"
+          },
+          "values": [0.4, 0.6]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "reliable": "yes",
+            "future_income": "low",
+            "ratio_of_debts_to_income": "high"
+          },
+          "values": [0.05, 0.95]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "reliable": "no",
+            "future_income": "high",
+            "ratio_of_debts_to_income": "low"
+          },
+          "values": [0.65, 0.35]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "reliable": "no",
+            "future_income": "high",
+            "ratio_of_debts_to_income": "medium"
+          },
+          "values": [0.5, 0.5]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "reliable": "no",
+            "future_income": "high",
+            "ratio_of_debts_to_income": "high"
+          },
+          "values": [0.2, 0.8]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "reliable": "no",
+            "future_income": "middle",
+            "ratio_of_debts_to_income": "low"
+          },
+          "values": [0.5, 0.5]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "reliable": "no",
+            "future_income": "middle",
+            "ratio_of_debts_to_income": "medium"
+          },
+          "values": [0.35, 0.65]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "reliable": "no",
+            "future_income": "middle",
+            "ratio_of_debts_to_income": "high"
+          },
+          "values": [0.1, 0.9]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "reliable": "no",
+            "future_income": "low",
+            "ratio_of_debts_to_income": "low"
+          },
+          "values": [0.15, 0.85]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "reliable": "no",
+            "future_income": "low",
+            "ratio_of_debts_to_income": "medium"
+          },
+          "values": [0.05, 0.95]
+        },
+        {
+          "states": ["good", "bad"],
+          "fields": {
+            "reliable": "no",
+            "future_income": "low",
+            "ratio_of_debts_to_income": "high"
+          },
+          "values": [0.0001, 0.9999]
+        }
+      ]
+    }
+  ]
+}

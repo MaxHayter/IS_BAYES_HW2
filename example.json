@@ -8,6 +8,13 @@
       ]
     },
     {
+      "name": "bad",
+      "states": [
+        "b0",
+        "b1"
+      ]
+    },
+    {
       "name": "dop",
       "states": [
         "o0",
@@ -60,6 +67,10 @@
     {
       "from": "grade",
       "to": ["letter"]
+    },
+    {
+      "from": "bad",
+      "to": ["intelligence"]
     }
   ],
   "coefficients": [
@@ -96,7 +107,17 @@
       "data": [
         {
           "states": ["i0", "i1"],
+          "fields": {
+            "bad": "b0"
+          },
           "values": [0.7, 0.3]
+        },
+        {
+          "states": ["i0", "i1"],
+          "fields": {
+            "bad": "b1"
+          },
+          "values": [0.2, 0.8]
         }
       ]
     },
@@ -206,6 +227,15 @@
             "grade": "g2"
           },
           "values": [0.99, 0.01]
+        }
+      ]
+    },
+    {
+      "node": "bad",
+      "data": [
+        {
+          "states": ["b0", "b1"],
+          "values": [0.7, 0.3]
         }
       ]
     }

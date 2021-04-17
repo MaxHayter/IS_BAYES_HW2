@@ -1,6 +1,8 @@
 package bayes
 
-import "github.com/MaxHayter/IS_BAYES_HW2/internal/graph"
+import (
+	"github.com/MaxHayter/IS_BAYES_HW2/internal/graph"
+)
 
 func NewBayes(gr *graph.Graph) *Bayes {
 	return &Bayes{Graph: gr}
@@ -47,7 +49,14 @@ func (b *Bayes) findAllDependents(from, now string, isChild bool, r map[string]m
 	return r
 }
 
-func (b *Bayes) findInterestNodes(name string) map[string]struct{} {
+func (b *Bayes) findInterestNodes(name string, all bool) map[string]struct{} {
+	if all {
+		ret := make(map[string]struct{}, len(b.Graph.Nodes))
+		for node := range b.Graph.Nodes {
+			ret[node] = struct{}{}
+		}
+		return ret
+	}
 	interestNodes := make(map[string]map[string]struct{})
 	interestNodes[name] = make(map[string]struct{})
 
@@ -68,11 +77,20 @@ func (b *Bayes) findInterestNodes(name string) map[string]struct{} {
 	}
 
 	ret := make(map[string]struct{}, len(interestNodes))
-	for node := range interestNodes { // TODO для корректной работы замените "interestNodes" на "b.Graph.Nodes"
+	for node := range interestNodes {
 		ret[node] = struct{}{}
+		ret = b.completeParents(node, ret)
 	}
 
 	return ret
+}
+
+func (b *Bayes) completeParents(node string, nodes map[string]struct{}) map[string]struct{} {
+	for parentIndex := range b.Graph.Nodes[node].Parents {
+		nodes[b.Graph.Nodes[node].Parents[parentIndex].Name] = struct{}{}
+		nodes = b.completeParents(b.Graph.Nodes[node].Parents[parentIndex].Name, nodes)
+	}
+	return nodes
 }
 
 func (b *Bayes) makeTable(interestNodes, obsNodes map[string]struct{}) []*Row {
@@ -112,26 +130,30 @@ func (b *Bayes) makeTable(interestNodes, obsNodes map[string]struct{}) []*Row {
 	for i := range table {
 		table[i].Probability = 1
 		for node := range table[i].States {
-			c, _ := b.Graph.GetInternalCoefficient(node, table[i].States[node], table[i].States)
+			c := b.getInternalCoefficient(node, table[i].States[node], table[i].States)
 			table[i].Probability *= c
 		}
 		sum += table[i].Probability
 	}
-
 	return table
 }
 
-func normalize(table []*Row) []*Row {
-	var sum float64 = 0
-	for i := range table {
-		sum += table[i].Probability
+func (b *Bayes) getInternalCoefficient(name, state string, fullStates map[string]string) float64 {
+	var find bool
+	for i := range b.Graph.Nodes[name].InternalCoefficients[state] {
+		find = true
+		for node := range b.Graph.Nodes[name].InternalCoefficients[state][i].States {
+			if fullStates[node] != b.Graph.Nodes[name].InternalCoefficients[state][i].States[node] {
+				find = false
+				break
+			}
+		}
+		if find {
+			return b.Graph.Nodes[name].InternalCoefficients[state][i].Value
+		}
 	}
 
-	for i := range table {
-		table[i].Probability /= sum
-	}
-
-	return table
+	return 0
 }
 
 func (b *Bayes) SetConstant(name, state string) error {
@@ -152,18 +174,7 @@ func (b *Bayes) UnsetConstant(name string) error {
 	return b.RecalculateWithObs(name)
 }
 
-func (b *Bayes) RecalculateWithObs(name string) error {
-	interestNodes := b.findInterestNodes(name)
-
-	obsNodes := make(map[string]struct{})
-	for node := range interestNodes {
-		if ok, _ := b.Graph.IsConstant(node); ok {
-			obsNodes[node] = struct{}{}
-		}
-	}
-
-	table := b.makeTable(interestNodes, obsNodes)
-
+func (b *Bayes) recalculate(interestNodes, obsNodes map[string]struct{}, table []*Row) error {
 	for node := range interestNodes {
 		if _, ok := obsNodes[node]; ok {
 			continue
@@ -185,4 +196,27 @@ func (b *Bayes) RecalculateWithObs(name string) error {
 	}
 
 	return nil
+}
+
+func (b *Bayes) Recalculate() error {
+	interestNodes := b.findInterestNodes("", true)
+
+	table := b.makeTable(interestNodes, nil)
+
+	return b.recalculate(interestNodes, nil, table)
+}
+
+func (b *Bayes) RecalculateWithObs(name string) error {
+	interestNodes := b.findInterestNodes(name, false)
+
+	obsNodes := make(map[string]struct{})
+	for node := range interestNodes {
+		if ok, _ := b.Graph.IsConstant(node); ok {
+			obsNodes[node] = struct{}{}
+		}
+	}
+
+	table := b.makeTable(interestNodes, obsNodes)
+
+	return b.recalculate(interestNodes, obsNodes, table)
 }

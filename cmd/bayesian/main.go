@@ -25,6 +25,10 @@ func main() {
 	}
 
 	b := bayes.NewBayes(gr)
+	err = b.Recalculate()
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	var command string
 	var exit bool

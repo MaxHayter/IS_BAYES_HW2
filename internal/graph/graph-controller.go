@@ -75,7 +75,7 @@ func (g *Graph) updateNode(name string) error {
 		}
 	}
 
-	return g.calculateCoefficients(name)
+	return nil
 }
 
 func (g *Graph) AddEdges(from string, to ...string) error {
@@ -183,10 +183,10 @@ func (g *Graph) SetInternalCoefficients(name string, states []string, values []f
 		g.Nodes[name].InternalCoefficients[states[i]][index].Value = values[i]
 	}
 
-	return g.calculateCoefficients(name)
+	return nil
 }
 
-func (g *Graph) getCoefficient(name, state string) (float64, error) {
+func (g *Graph) GetCoefficient(name, state string) (float64, error) {
 	if _, ok := g.Nodes[name]; !ok {
 		return 0, errors.New("node with this name does not exist")
 	}
@@ -198,35 +198,6 @@ func (g *Graph) getCoefficient(name, state string) (float64, error) {
 	}
 
 	return 0, errors.New("incorrect state")
-}
-
-func (g *Graph) calculateCoefficients(name string) error {
-	if _, ok := g.Nodes[name]; !ok {
-		return errors.New("node with this name does not exist")
-	}
-
-	if g.Nodes[name].Parents == nil {
-		for i := range g.Nodes[name].States {
-			g.Nodes[name].Coefficients[i] = g.Nodes[name].InternalCoefficients[g.Nodes[name].States[i]][0].Value
-		}
-	} else {
-		for i := range g.Nodes[name].States {
-			var c float64
-			for j := range g.Nodes[name].InternalCoefficients[g.Nodes[name].States[i]] {
-				cState := g.Nodes[name].InternalCoefficients[g.Nodes[name].States[i]][j].Value
-				for pNodeName, state := range g.Nodes[name].InternalCoefficients[g.Nodes[name].States[i]][j].States {
-					if coef, err := g.getCoefficient(pNodeName, state); err == nil {
-						cState *= coef
-
-					}
-				}
-				c += cState
-			}
-			g.Nodes[name].Coefficients[i] = c
-		}
-	}
-
-	return nil
 }
 
 func (g *Graph) SetConstant(name, state string) error {
@@ -260,11 +231,6 @@ func (g *Graph) UnsetConstant(name string) error {
 		return errors.New("this node is not constant")
 	}
 
-	err := g.calculateCoefficients(name)
-	if err != nil {
-		return err
-	}
-
 	g.Nodes[name].constant = false
 
 	return nil
@@ -294,55 +260,6 @@ func (g *Graph) IsConstant(name string) (bool, error) {
 	}
 
 	return g.Nodes[name].constant, nil
-}
-
-func (g *Graph) GetInternalCoefficient(name, state string, fullStates map[string]string) (float64, error) {
-	if _, ok := g.Nodes[name]; !ok {
-		return 0, errors.New("node with this name does not exist")
-	}
-
-	var misses []map[string]string
-	var indexes []int
-
-	for i := range g.Nodes[name].InternalCoefficients[state] {
-		find := true
-		miss := make(map[string]string)
-		for node := range g.Nodes[name].InternalCoefficients[state][i].States {
-			if _, ok := fullStates[node]; !ok {
-				miss[node] = g.Nodes[name].InternalCoefficients[state][i].States[node]
-				continue
-			}
-			if fullStates[node] != g.Nodes[name].InternalCoefficients[state][i].States[node] {
-				find = false
-				break
-			}
-		}
-		if find {
-			indexes = append(indexes, i)
-			misses = append(misses, miss)
-		}
-	}
-
-	if len(indexes) == 1 {
-		return g.Nodes[name].InternalCoefficients[state][indexes[0]].Value, nil
-	} else if len(indexes) > 1 && misses != nil {
-		var coef float64
-		for i := range indexes {
-			summand := g.Nodes[name].InternalCoefficients[state][indexes[i]].Value
-			for node := range misses[i] {
-				isConst, _ := g.IsConstant(node)
-				constState, _ := g.GetConstantState(node)
-				if !isConst || isConst && misses[i][node] == constState {
-					c, _ := g.GetInternalCoefficient(node, misses[i][node], fullStates)
-					summand *= c
-				}
-			}
-			coef += summand
-		}
-		return coef, nil
-	}
-
-	return 0, nil
 }
 
 func getMaxLen(nodes ...*Node) int {

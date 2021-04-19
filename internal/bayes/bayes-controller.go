@@ -126,14 +126,13 @@ func (b *Bayes) makeTable(interestNodes, obsNodes map[string]struct{}) []*Row {
 			k *= lenStates
 		}
 	}
-	var sum float64
+
 	for i := range table {
 		table[i].Probability = 1
 		for node := range table[i].States {
 			c := b.getInternalCoefficient(node, table[i].States[node], table[i].States)
 			table[i].Probability *= c
 		}
-		sum += table[i].Probability
 	}
 	return table
 }
